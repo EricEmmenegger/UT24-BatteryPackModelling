@@ -1,6 +1,6 @@
-SOCOCV = importdata("Murata VTC6 SOC OCV Curve.txt"); %Import the cell SOC OCV curve
+SOCOCV = importdata("Fine Murata VTC6 SOC OCV Curve.txt"); %Import the cell SOC OCV curve
 
-%Import the Michigan Accel run power draw data
+%Import the Michigan Accel power draw data
 Larosa1 = importdata("UT23 Power Draw\Michigan Larosa Accel 1.csv");
 Larosa2 = importdata("UT23 Power Draw\Michigan Larosa Accel 2.csv");
 Ball1 = importdata("UT23 Power Draw\Michigan Ball Accel 1.csv");
