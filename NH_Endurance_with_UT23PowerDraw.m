@@ -3,7 +3,7 @@ SOCOCV = importdata("Fine Murata VTC6 SOC OCV Curve.txt");
 endurance_data = importdata("UT23 Power Draw\NH Endurance.csv");
 
 %Variables
-Scount = 115;       %Pack cell series count
+Scount = 110;       %Pack cell series count
 Pcount = 5;         %Pack cell parallel count
 R_cell = 0.0225;    %Cell internal resistance in Ohm
 R_busbars = 0.15;   %Resistance of busbars and other components in the high current path in Ohms
@@ -27,12 +27,12 @@ for t=1:length(endurance_data)
     if V_cell < 2.8
         disp("Cell undervoltage fault at " + string(endurance_data(t)) + "seconds")
     end
-    Qgen = R_cell*(I_pack/Pcount)^2;
+    Qgen_cell = R_cell*(I_pack/Pcount)^2;
     %This section of the loop records the results in a table
     endurance_results(t,1) = endurance_data(t);
     endurance_results(t,2) = V_cell;
     endurance_results(t,3) = I_pack;
-    endurance_results(t,4) = Qgen;
+    endurance_results(t,4) = Qgen_cell;
     endurance_results(t,5) = SOC;
     endurance_results(t,6) = Cell_OCV;
     %This section of the loop subtracts the amount of SOC used and
@@ -78,3 +78,10 @@ title("Pack SOC in NH Endurance")
 xlabel("Time (seconds)")
 ylabel("SOC (%)")
 saveas(soc_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm NH Endurance Pack SOC Plot.png")
+
+qgen_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
+plot(endurance_results(:,1),endurance_results(:,4));
+title("Heat Generation per Cell in NH Endurance");
+xlabel("Time (seconds")
+ylabel("Heat Generation (W)")
+saveas(qgen_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm NH Endurance Cell Heat Generation Plot.png")
