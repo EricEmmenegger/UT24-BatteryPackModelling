@@ -9,9 +9,9 @@ Ball2 = importdata("UT23 Power Draw\Michigan Ball Accel 2.csv");
 %Variables
 Scount = 115;       %Pack cell series count
 Pcount = 5;         %Pack cell parallel count
-R_cell = 0.021;     %Cell internal resistance in Ohm
+R_cell = 0.0225;     %Cell internal resistance in Ohm
 R_busbars = 0.15;    %Resistance of busbars and other components in the high current path in Ohms
-SOC_init = 95;      %Initial SOC of the pack
+SOC_init = 85;      %Initial SOC of the pack
 
 %Pack parameters
 R_pack = R_cell * Scount/Pcount + R_busbars %Total pack internal resistance in Ohms
@@ -76,11 +76,11 @@ plot(Larosa1_results(:,1),Larosa1_results(:,2),Larosa2_results(:,1),Larosa2_resu
 title("Cell Voltage in Michigan Accel")
 xlabel("Time (seconds)")
 ylabel("Cell voltage (V)")
-saveas(voltage_plot,"Plots/" + string(SOC_init) + "%SOC " + string(Scount) + "S " + string(R_pack) + "ohm MI Accel Voltage Plot.png")
+saveas(voltage_plot,"Plots/Michigan Acceleration/" + string(SOC_init) + "%SOC " + string(Scount) + "S " + string(R_pack) + "ohm MI Accel Voltage Plot.png")
 
 current_plot = figure('visible','off');
 plot(Larosa1_results(:,1),Larosa1_results(:,3),Larosa2_results(:,1),Larosa2_results(:,3),Ball1_results(:,1),Ball1_results(:,3),Ball2_results(:,1),Ball2_results(:,3));
 title("Pack Current in Accel")
 xlabel("Time (seconds)")
 ylabel("Pack Current (A)")
-saveas(current_plot,"Plots/" + string(SOC_init) + "%SOC " + string(Scount) + "S " + string(R_pack) + "ohm MI Accel Current Plot.png")
+saveas(current_plot,"Plots/Michigan Acceleration/" + string(SOC_init) + "%SOC " + string(Scount) + "S " + string(R_pack) + "ohm MI Accel Current Plot.png")

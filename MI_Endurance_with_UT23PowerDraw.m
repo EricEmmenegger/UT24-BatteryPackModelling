@@ -3,7 +3,7 @@ SOCOCV = importdata("Fine Murata VTC6 SOC OCV Curve.txt");
 endurance_data = importdata("UT23 Power Draw\Michigan Endurance.csv");
 
 %Variables
-Scount = 115;       %Pack cell series count
+Scount = 110;       %Pack cell series count
 Pcount = 5;         %Pack cell parallel count
 R_cell = 0.0225;    %Cell internal resistance in Ohm
 R_busbars = 0.15;   %Resistance of busbars and other components in the high current path in Ohms
@@ -49,39 +49,39 @@ plot(endurance_results(:,1),endurance_results(:,2)*Scount);
 title("Pack Voltage in Endurance")
 xlabel("Time (seconds)")
 ylabel("Pack voltage (V)")
-saveas(pack_voltage_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Voltage Plot.png")
+saveas(pack_voltage_plot,"Plots/Michigan Endurance/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Voltage Plot.png")
 
 cell_voltage_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,2));
 title("Cell Voltage in Endurance")
 xlabel("Time (seconds)")
 ylabel("Cell voltage (V)")
-saveas(cell_voltage_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Cell Voltage Plot.png")
+saveas(cell_voltage_plot,"Plots/Michigan Endurance/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Cell Voltage Plot.png")
 
 ocv_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,6));
 title("Cell OCV in Endurance")
 xlabel("Time (seconds)")
 ylabel("OCV")
-saveas(ocv_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance OCV Plot.png")
+saveas(ocv_plot,"Plots/Michigan Endurance/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance OCV Plot.png")
 
 current_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,3));
 title("Pack Current in Endurance")
 xlabel("Time (seconds)")
 ylabel("Current (A)")
-saveas(current_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Pack Current Plot.png")
+saveas(current_plot,"Plots/Michigan Endurance/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Pack Current Plot.png")
 
 soc_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,5));
 title("Pack SOC in Endurance")
 xlabel("Time (seconds)")
 ylabel("SOC (%)")
-saveas(soc_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Pack SOC Plot.png")
+saveas(soc_plot,"Plots/Michigan Endurance/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Pack SOC Plot.png")
 
 qgen_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,4));
 title("Heat Generation per Cell in MI Endurance");
 xlabel("Time (seconds")
 ylabel("Heat Generation (W)")
-saveas(qgen_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Cell Heat Generation Plot.png")
+saveas(qgen_plot,"Plots/Michigan Endurance/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance Cell Heat Generation Plot.png")

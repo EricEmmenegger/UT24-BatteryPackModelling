@@ -51,39 +51,39 @@ plot(endurance_results(:,1),endurance_results(:,2)*Scount);
 title("Pack Voltage in MI 22 Autocross Lap")
 xlabel("Time (seconds)")
 ylabel("Pack voltage (V)")
-saveas(pack_voltage_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Voltage Plot.png")
+saveas(pack_voltage_plot,"Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Voltage Plot.png")
 
 cell_voltage_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,2));
 title("Cell Voltage in MI 22 Autocross Lap")
 xlabel("Time (seconds)")
 ylabel("Cell voltage (V)")
-saveas(cell_voltage_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Cell Voltage Plot.png")
+saveas(cell_voltage_plot,"Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Cell Voltage Plot.png")
 
 ocv_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,6));
 title("Cell OCV in MI 22 Autocross Lap")
 xlabel("Time (seconds)")
 ylabel("OCV")
-saveas(ocv_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap OCV Plot.png")
+saveas(ocv_plot,"Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap OCV Plot.png")
 
 current_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,3));
 title("Pack Current in MI 22 Autocross Lap")
 xlabel("Time (seconds)")
 ylabel("Current (A)")
-saveas(current_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Pack Current Plot.png")
+saveas(current_plot,"Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Pack Current Plot.png")
 
 soc_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,5));
 title("Pack SOC in MI 22 Autocross Lap")
 xlabel("Time (seconds)")
 ylabel("SOC (%)")
-saveas(soc_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Pack SOC Plot.png")
+saveas(soc_plot,"Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Pack SOC Plot.png")
 
 qgen_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
 plot(endurance_results(:,1),endurance_results(:,4));
 title("Heat Generation per Cell in MI 22 Autocross Lap");
 xlabel("Time (seconds")
 ylabel("Heat Generation (W)")
-saveas(qgen_plot,"Plots/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Cell Heat Generation Plot.png")
+saveas(qgen_plot,"Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Cell Heat Generation Plot.png")
