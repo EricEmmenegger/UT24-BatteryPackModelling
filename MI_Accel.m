@@ -71,16 +71,20 @@ for t = 1:length(Ball2)
     Ball2_results(t,3) = I_pack;
 end
 
+%% 
+
+%Electrical Plots
+
 voltage_plot = figure('visible','off');
 plot(Larosa1_results(:,1),Larosa1_results(:,2),Larosa2_results(:,1),Larosa2_results(:,2),Ball1_results(:,1),Ball1_results(:,2),Ball2_results(:,1),Ball2_results(:,2));
 title("Cell Voltage in Michigan Accel")
 xlabel("Time (seconds)")
 ylabel("Cell voltage (V)")
-saveas(voltage_plot,"Plots/Michigan Acceleration/" + string(SOC_init) + "%SOC " + string(Scount) + "S " + string(R_pack) + "ohm MI Accel Voltage Plot.png")
+saveas(voltage_plot,"Electrical Plots/Michigan Acceleration/" + string(SOC_init) + "%SOC " + string(Scount) + "S " + string(R_pack) + "ohm MI Accel Voltage Plot.png")
 
 current_plot = figure('visible','off');
 plot(Larosa1_results(:,1),Larosa1_results(:,3),Larosa2_results(:,1),Larosa2_results(:,3),Ball1_results(:,1),Ball1_results(:,3),Ball2_results(:,1),Ball2_results(:,3));
 title("Pack Current in Accel")
 xlabel("Time (seconds)")
 ylabel("Pack Current (A)")
-saveas(current_plot,"Plots/Michigan Acceleration/" + string(SOC_init) + "%SOC " + string(Scount) + "S " + string(R_pack) + "ohm MI Accel Current Plot.png")
+saveas(current_plot,"Electrical Plots/Michigan Acceleration/" + string(SOC_init) + "%SOC " + string(Scount) + "S " + string(R_pack) + "ohm MI Accel Current Plot.png")
