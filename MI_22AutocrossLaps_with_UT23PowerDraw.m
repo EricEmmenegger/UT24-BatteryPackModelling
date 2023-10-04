@@ -1,3 +1,5 @@
+%%Data Calculation
+
 %Import the cell SOC OCV curve and Michigan Autocross power draw data
 SOCOCV = importdata("Fine Murata VTC6 SOC OCV Curve.txt");
 simulated_endurance_data = importdata("UT23 Power Draw\Michigan 22 laps of Damian Autocross 2.csv")
@@ -5,7 +7,7 @@ simulated_endurance_data = importdata("UT23 Power Draw\Michigan 22 laps of Damia
 %a 3 minute break in the middle. 
 
 %Variables
-Scount = 110;       %Pack cell series count
+Scount = 115;       %Pack cell series count
 Pcount = 5;         %Pack cell parallel count
 R_cell = 0.0225;    %Cell internal resistance in Ohm
 R_busbars = 0.15;   %Resistance of busbars and other components in the high current path in Ohms
@@ -53,59 +55,17 @@ for t=1:length(simulated_endurance_data)
     Pack_OCV = Scount*Cell_OCV;
 end
 
-%% 
+%% Plotting Section
 
-%Electrical Plots
+plot_titles =  ["Cell Voltage (V)" "Pack Current (A)" "Cell Heat Generation (W)" "State of Charge (%)" "Cell OCV (V)" "Cell Temperature (deg C)"];
+time = endurance_results(:,1);
 
-pack_voltage_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
-plot(endurance_results(:,1),endurance_results(:,2)*Scount);
-title("Pack Voltage in MI 22 Autocross Lap")
-xlabel("Time (seconds)")
-ylabel("Pack voltage (V)")
-saveas(pack_voltage_plot,"Electrical Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Voltage Plot.png")
-
-cell_voltage_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
-plot(endurance_results(:,1),endurance_results(:,2));
-title("Cell Voltage in MI 22 Autocross Lap")
-xlabel("Time (seconds)")
-ylabel("Cell voltage (V)")
-saveas(cell_voltage_plot,"Electrical Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Cell Voltage Plot.png")
-
-ocv_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
-plot(endurance_results(:,1),endurance_results(:,6));
-title("Cell OCV in MI 22 Autocross Lap")
-xlabel("Time (seconds)")
-ylabel("OCV")
-saveas(ocv_plot,"Electrical Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap OCV Plot.png")
-
-current_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
-plot(endurance_results(:,1),endurance_results(:,3));
-title("Pack Current in MI 22 Autocross Lap")
-xlabel("Time (seconds)")
-ylabel("Current (A)")
-saveas(current_plot,"Electrical Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Pack Current Plot.png")
-
-soc_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
-plot(endurance_results(:,1),endurance_results(:,5));
-title("Pack SOC in MI 22 Autocross Lap")
-xlabel("Time (seconds)")
-ylabel("SOC (%)")
-saveas(soc_plot,"Electrical Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Pack SOC Plot.png")
-
-%% 
-
-%Heating Plots
-
-qgen_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
-plot(endurance_results(:,1),endurance_results(:,4));
-title("Heat Generation per Cell in MI 22 Autocross Lap");
-xlabel("Time (seconds")
-ylabel("Heat Generation (W)")
-saveas(qgen_plot,"Heating Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Cell Heat Generation Plot.png")
-
-T_plot = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
-plot(endurance_results(:,1),endurance_results(:,7));
-title("Adiabatic Cell Temperature in MI 22 Autocross Lap");
-xlabel("Time (seconds")
-ylabel("Cell Temperature (Celsius)")
-saveas(T_plot,"Heating Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm MI 22 Autocross Lap Cell Temperature Plot.png")
+for i=1:6
+    current_figure = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
+    data = endurance_results(:,i+1);
+    plot(time, data);
+    title(plot_titles(i) + " in Michigan 22 Autocross Laps")
+    xlabel("Time (seconds)")
+    ylabel(plot_titles(i))
+    saveas(current_figure, "Plots/Michigan 22 Autocross Laps/" + string(Scount) + "S " + string(R_pack) + " ohm CZ Endurance" + plot_titles(i) + " Plot.png")
+end
