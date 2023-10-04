@@ -40,6 +40,7 @@ for t=1:length(endurance_data)
     if V_cell < 2.8
         disp("Cell undervoltage fault at " + string(endurance_data(t)) + "seconds")
     end
+    
     %Calculating the cell heat generation, heat accumulation and heat loss
     Qgen_cell = R_cell*(I_pack/Pcount)^2;               %Heat generated (W)
     Qcool_cell = htc * A_ht * (T_cell_cool - T_amb);    %Cooling (W)
