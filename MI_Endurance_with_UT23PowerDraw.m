@@ -14,7 +14,7 @@ Cp_batt = 960;      %Cell heat capacity in J/(kg*K)
 m_batt = 46.6/1000; %Cell mass in kilograms
 T_init = 30;        %Initial cell temperature
 T_amb = 30;         %Ambient temperature
-htc = 10;           %Heat transfer coefficient in W/(m^2 * K)
+htc = 50;           %Heat transfer coefficient in W/(m^2 * K)
 A_ht = pi * 0.018 * 0.0535 / 2; %Area of cell that transfers heat in m^2
 %The above calculation assumes that 1/2 of the circumference of the cell
 %gets enough airflow to effectively transfer heat, and that only the
@@ -23,7 +23,7 @@ A_ht = pi * 0.018 * 0.0535 / 2; %Area of cell that transfers heat in m^2
 
 %Pack parameters
 R_pack = R_cell * Scount/Pcount + R_busbars         %Total pack internal resistance in Ohms
-Q_batt = SOC_init/100 * 3000;                       %Calculate the initial cell capacity in Ah
+Q_batt = SOC_init/100 * 3000;                       %Calculate the initial cell capacity in mAh
 SOC = SOC_init;                                     %Initialize SOC variable
 T_cell_adiabatic = T_init;                          %Initialize Adiabatic Temperature variable
 T_cell_cool = T_init;                               %Initialize cooled temperature variable
