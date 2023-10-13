@@ -16,7 +16,7 @@ Cp_batt = 960;      %Cell heat capacity in J/(kg*K)
 m_batt = 46.6/1000; %Cell mass in kilograms
 T_init = 30;        %Initial cell temperature
 T_amb = 30;         %Ambient temperature
-htc = 10;           %Heat transfer coefficient in W/(m^2 * K)
+htc = 50;           %Heat transfer coefficient in W/(m^2 * K)
 A_ht = pi * 0.018 * 0.0535 / 2; %Area of cell that transfers heat in m^2
 %The above calculation assumes that 1/2 of the circumference of the cell
 %gets enough airflow to effectively transfer heat, and that only the
