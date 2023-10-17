@@ -20,6 +20,9 @@ A_ht = pi * 0.018 * 0.0535 / 2; %Area of cell that transfers heat in m^2
 %gets enough airflow to effectively transfer heat, and that only the
 %area of the cells not covered by the end caps of the Enepaq brick
 %transfers heat.
+Cp_air = 1005;      %Specific heat capacity of air (J/kg*K)
+mdot_air = 0.075;   %Mass Flow rate of air in kg/s
+
 
 %Pack parameters
 R_pack = R_cell * Scount/Pcount + R_busbars         %Total pack internal resistance in Ohms
@@ -27,11 +30,19 @@ Q_batt = SOC_init/100 * 3000;                       %Calculate the initial cell 
 SOC = SOC_init;                                     %Initialize SOC variable
 T_cell_adiabatic = T_init;                          %Initialize Adiabatic Temperature variable
 T_cell_cool = T_init;                               %Initialize cooled temperature variable
+T_between12 = T_init;                               %Initialize temperature between segment 1 and 2
+T_cell_2 = T_init;                                  %Initialize segment 2 temperature
+T_between23 = T_init;                               %Initialize temperature between segment 2 and 3
+T_cell_3 = T_init;                                  %Initialize segment 3 temperature
+T_between34 = T_init;                               %Initialize temperature between segment 3 and 4
+T_cell_4 = T_init;                                  %Initialize segment 4 temperature
+T_between45 = T_init;                               %Initialize temperature between segment 4 and 5
+T_cell_5 = T_init;                                  %Initialize segment 5 temperature
 [value, idx] = min(abs(SOCOCV(:,1)-SOC/100));       %Retrieve the index of the closest SOC-OCV point
 Cell_OCV = SOCOCV(idx,2);                           %Retrieve the cell open circuit voltage
 Pack_OCV = Scount*Cell_OCV;                         %Calculate the initial pack open circuit voltage
 
-endurance_results = zeros(length(endurance_data),8);
+endurance_results = zeros(length(endurance_data),12);
 
 for t=1:length(endurance_data)
     %Calculating the pack current and cell voltage under load
@@ -51,6 +62,31 @@ for t=1:length(endurance_data)
     T_cell_adiabatic = T_cell_adiabatic + Qaccum_cell_adiabatic/(Cp_batt*m_batt);
     T_cell_cool = T_cell_cool + Qaccum_cell_cool/(Cp_batt*m_batt);
 
+    %Calculate the temperatures for the next 4 segments
+    %Segment 2
+    T_between12 = T_amb + Qcool_cell/(mdot_air*Cp_air);
+    Qcool_cell_2 = htc * A_ht * (T_cell_2 - T_between12);
+    Qaccum_cell_2 = (Qgen_cell - Qcool_cell_2) * 0.05;
+    T_cell_2 = T_cell_2 + Qaccum_cell_2/(Cp_batt*m_batt);
+    %Segment 3
+    T_between23 = T_between12 + Qcool_cell_2/(mdot_air*Cp_air);
+    Qcool_cell_3 = htc * A_ht * (T_cell_3 - T_between23);
+    Qaccum_cell_3 = (Qgen_cell - Qcool_cell_3) * 0.05;
+    T_cell_3 = T_cell_3 + Qaccum_cell_3/(Cp_batt*m_batt);
+    %Segment 4
+    T_between34 = T_between23 + Qcool_cell_3/(mdot_air*Cp_air);
+    Qcool_cell_4 = htc * A_ht * (T_cell_4 - T_between34);
+    Qaccum_cell_4 = (Qgen_cell - Qcool_cell_4) * 0.05;
+    T_cell_4 = T_cell_4 + Qaccum_cell_4/(Cp_batt*m_batt);
+    %Segment 5
+    T_between45 = T_between34 + Qcool_cell_4/(mdot_air*Cp_air);
+    Qcool_cell_5 = htc * A_ht * (T_cell_5 - T_between45);
+    Qaccum_cell_5 = (Qgen_cell - Qcool_cell_5) * 0.05;
+    T_cell_5 = T_cell_5 + Qaccum_cell_5/(Cp_batt*m_batt);
+
+
+
+
     %This section of the loop records the results in a table
     endurance_results(t,1) = endurance_data(t);
     endurance_results(t,2) = V_cell;
@@ -60,6 +96,10 @@ for t=1:length(endurance_data)
     endurance_results(t,6) = Cell_OCV;
     endurance_results(t,7) = T_cell_adiabatic;
     endurance_results(t,8) = T_cell_cool;
+    endurance_results(t,9) = T_cell_2;
+    endurance_results(t,10) = T_cell_3;
+    endurance_results(t,11) = T_cell_4;
+    endurance_results(t,12) = T_cell_5;
 
     %This section of the loop subtracts the amount of SOC used and
     %determines the new cell OCV
@@ -84,3 +124,14 @@ for i=1:7
     ylabel(plot_titles(i))
     saveas(current_figure, "Plots/Michigan Endurance/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance " + plot_titles(i) + " Plot.png")
 end
+
+current_figure = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
+hold on
+plot(endurance_results(:,1),endurance_results(:,8))
+plot(endurance_results(:,1),endurance_results(:,9),'y')
+plot(endurance_results(:,1),endurance_results(:,10),'b')
+plot(endurance_results(:,1),endurance_results(:,11),'g')
+plot(endurance_results(:,1),endurance_results(:,12),'r')
+xlabel("Time (seconds)")
+ylabel(plot_titles(i))
+saveas(current_figure,"Plots/Michigan Endurance/Segment Temperature Differential.png")
