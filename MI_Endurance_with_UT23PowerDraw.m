@@ -3,11 +3,11 @@
 %Import the cell SOC OCV curve and Michigan Endurance power draw data
 SOCOCV = importdata("Fine Murata VTC6 SOC OCV Curve.txt");
 endurance_data = importdata("UT23 Power Draw\Michigan Endurance.csv");
+DCIR_LUT = importdata("DCIR Lookup Table.csv");
 
 %Variables
 Scount = 115;       %Pack cell series count
 Pcount = 5;         %Pack cell parallel count
-R_cell = 0.0225;    %Cell internal resistance in Ohm
 R_busbars = 0.15;   %Resistance of busbars and other components in the high current path in Ohms
 SOC_init = 94;      %Initial SOC of the pack, this was made to match 2023 data
 Cp_batt = 960;      %Cell heat capacity in J/(kg*K)
@@ -24,8 +24,13 @@ Cp_air = 1005;      %Specific heat capacity of air (J/kg*K)
 mdot_air = 0.075;   %Mass Flow rate of air in kg/s
 
 
-%Pack parameters
-R_pack = R_cell * Scount/Pcount + R_busbars         %Total pack internal resistance in Ohms
+%Cell DC-IR Lookup
+[closest_SOC,closest_SOC_id] = min(abs(SOC_init-DCIR_LUT(:,1)));
+[closest_temp,closest_temp_id] = min(abs(T_init-DCIR_LUT(1,:)));
+R_cell = DCIR_LUT(closest_SOC_id,closest_temp_id) / 1000;
+
+%% Pack Parameters
+
 Q_batt = SOC_init/100 * 3000;                       %Calculate the initial cell capacity in mAh
 SOC = SOC_init;                                     %Initialize SOC variable
 T_cell_adiabatic = T_init;                          %Initialize Adiabatic Temperature variable
@@ -44,11 +49,17 @@ Pack_OCV = Scount*Cell_OCV;                         %Calculate the initial pack 
 
 endurance_results = zeros(length(endurance_data),12);
 
+%% Endurance for loop
+
 for t=1:length(endurance_data)
+    %Calculating pack resistance at that point in time
+
+    R_pack = R_cell * Scount/Pcount + R_busbars;        %Total pack internal resistance in Ohms
+    
     %Calculating the pack current and cell voltage under load
     I_pack = (Pack_OCV - sqrt(Pack_OCV^2 - 4000 * R_pack * endurance_data(t,3)))/(2*R_pack);
     V_cell = Cell_OCV - I_pack/Pcount * R_cell;
-    if V_cell < 2.8
+    if V_cell < 2.5
         disp("Cell undervoltage fault at " + string(endurance_data(t)) + "seconds")
     end
     
@@ -102,12 +113,15 @@ for t=1:length(endurance_data)
     endurance_results(t,12) = T_cell_5;
 
     %This section of the loop subtracts the amount of SOC used and
-    %determines the new cell OCV
+    %determines the new cell OCV and DCIR
     Q_batt = Q_batt - 0.05*I_pack/(3.6*Pcount);
     SOC = Q_batt/30;
     [value, idx] = min(abs(SOCOCV(:,1)-SOC/100));
     Cell_OCV = SOCOCV(idx,2);
     Pack_OCV = Scount*Cell_OCV;
+    [closest_SOC,closest_SOC_id] = min(abs(SOC-DCIR_LUT(:,1)));
+    [closest_temp,closest_temp_id] = min(abs(T_cell_3-DCIR_LUT(1,:)));
+    R_cell = DCIR_LUT(closest_SOC_id,closest_temp_id) / 1000;
 end
 
 %% Plotting Section
@@ -122,7 +136,7 @@ for i=1:7
     title(plot_titles(i) + " in Michigan Endurance")
     xlabel("Time (seconds)")
     ylabel(plot_titles(i))
-    saveas(current_figure, "Plots/Michigan Endurance/" + string(Scount) + "S " + string(R_pack) + " ohm MI Endurance " + plot_titles(i) + " Plot.png")
+    saveas(current_figure, "Plots/Michigan Endurance/DCIR LUT/" + plot_titles(i) + " Plot.png")
 end
 
 current_figure = figure('visible','off','Units','centimeters','Position',[0 0 20 15]);
@@ -134,4 +148,4 @@ plot(endurance_results(:,1),endurance_results(:,11),'g')
 plot(endurance_results(:,1),endurance_results(:,12),'r')
 xlabel("Time (seconds)")
 ylabel(plot_titles(i))
-saveas(current_figure,"Plots/Michigan Endurance/Segment Temperature Differential.png")
+saveas(current_figure,"Plots/Michigan Endurance/DCIR LUT/Segment Temperature Differential.png")
